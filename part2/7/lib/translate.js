@@ -16,7 +16,7 @@ const segmentMap = {
 
 export function translate(instruction, fileBaseName) {
   const words = instruction.split(" ");
-  let result = ``;
+  let result = `// ${instruction}`;
   const uuid = randomUUID().replaceAll("-", "");
 
   switch (words[0]) {
@@ -31,7 +31,8 @@ export function translate(instruction, fileBaseName) {
         case "that": {
           // push that __
           const segmentBaseAddressKeyword = segmentMap[segment];
-          result += `@${segmentBaseAddressKeyword}
+          result += `
+            @${segmentBaseAddressKeyword}
             D=M
             @${index}
             A=D+A
@@ -49,7 +50,8 @@ export function translate(instruction, fileBaseName) {
           // push pointer __
           const baseAddress = segment == "pointer" ? 3 : 5;
           const finalAddress = baseAddress + index;
-          result += `@${finalAddress}
+          result += `
+            @${finalAddress}
             D=M
             @SP
             A=M
@@ -62,7 +64,8 @@ export function translate(instruction, fileBaseName) {
         case "constant": {
           // push constant __
           const constant = words[2];
-          result += `@${constant}
+          result += `
+            @${constant}
             D=A
             @SP
             A=M
@@ -74,7 +77,8 @@ export function translate(instruction, fileBaseName) {
         }
         case "static": {
           const symbol = `${fileBaseName}.${index}`;
-          result += `@${symbol}
+          result += `
+            @${symbol}
             D=M
             @SP
             A=M
@@ -94,8 +98,9 @@ export function translate(instruction, fileBaseName) {
       // pop __ __
       // Pop with no arguments will simply push the topmost item off the stack
       if (words.length == 1) {
-        result += `@SP
-            M=M-1
+        result += `
+        @SP
+        M=M-1
         `;
         break;
       }
@@ -111,7 +116,8 @@ export function translate(instruction, fileBaseName) {
         case "that": {
           // pop that __
           const segmentBaseAddressKeyword = segmentMap[segment];
-          result += `@${segmentBaseAddressKeyword}
+          result += `
+            @${segmentBaseAddressKeyword}
             D=M
             @${index}
             D=D+A
@@ -130,7 +136,8 @@ export function translate(instruction, fileBaseName) {
         case "pointer": {
           const baseAddress = segment == "pointer" ? 3 : 5;
           const finalAddress = baseAddress + index;
-          result += `@SP
+          result += `
+            @SP
             AM=M-1
             D=M
             @${finalAddress}
@@ -140,7 +147,8 @@ export function translate(instruction, fileBaseName) {
         }
         case "static": {
           const symbol = `${fileBaseName}.${index}`;
-          result += `@SP
+          result += `
+            @SP
             AM=M-1
             D=M
             @${symbol}
@@ -159,7 +167,8 @@ export function translate(instruction, fileBaseName) {
     }
     case "add": {
       // add
-      result += `@SP
+      result += `
+      @SP
       AM=M-1
       A=A-1
       D=M
@@ -172,7 +181,8 @@ export function translate(instruction, fileBaseName) {
     }
     case "sub": {
       // sub
-      result += `@SP
+      result += `
+      @SP
       AM=M-1
       A=A-1
       D=M
@@ -185,7 +195,8 @@ export function translate(instruction, fileBaseName) {
     }
     case "neg": {
       // neg
-      result += `@SP
+      result += `
+      @SP
       A=M-1
       M=-M
       `;
@@ -193,7 +204,8 @@ export function translate(instruction, fileBaseName) {
     }
     case "eq": {
       // eq
-      result += `@SP
+      result += `
+        @SP
         M=M-1
         AM=M-1
         D=M
@@ -220,7 +232,8 @@ export function translate(instruction, fileBaseName) {
     }
     case "gt": {
       //gt
-      result += `@SP
+      result += `
+        @SP
         M=M-1
         AM=M-1
         D=M
@@ -241,12 +254,14 @@ export function translate(instruction, fileBaseName) {
             M=-1
             @SP
             M=M+1
-        (END_${uuid})`;
+        (END_${uuid})
+        `;
       break;
     }
     case "lt": {
       // lt
-      result += `@SP
+      result += `
+        @SP
         M=M-1
         AM=M-1
         D=M
@@ -272,7 +287,8 @@ export function translate(instruction, fileBaseName) {
       break;
     }
     case "and": {
-      result += `@SP
+      result += `
+      @SP
       A=M-1
       D=M
       A=A-1
@@ -283,7 +299,8 @@ export function translate(instruction, fileBaseName) {
       break;
     }
     case "or": {
-      result += `@SP
+      result += `
+        @SP
         A=M-1
         D=M
         A=A-1
@@ -294,7 +311,8 @@ export function translate(instruction, fileBaseName) {
       break;
     }
     case "not": {
-      result += `@SP
+      result += `
+        @SP
         A=M-1
         M=!M
         `;

@@ -56,5 +56,5 @@ export async function writeInstructionsToFile(instructions, filePath) {
  * @returns {string} The normalised text
  */
 function normalizeLineEndings(str, normalized = "\n") {
-  return str.replace(/\r?\n/g, normalized);
+  return str.replaceAll(/\r?\n/g, normalized);
 }
