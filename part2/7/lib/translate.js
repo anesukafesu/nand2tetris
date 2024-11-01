@@ -16,18 +16,20 @@ const segmentMap = {
 
 export function translate(instruction, fileBaseName) {
   const words = instruction.split(" ");
-  const uuid = randomUUID();
   let result = `// ${instruction}`;
+  const uuid = randomUUID().replaceAll("-", "");
 
   switch (words[0]) {
-    case "push": // push __ __
+    case "push": {
+      // push __ __
       const segment = words[1];
       const index = Number(words[2]);
       switch (segment) {
         case "local": // push local __
         case "argument": // push argument __
         case "this": // push this __
-        case "that": // push that __
+        case "that": {
+          // push that __
           const segmentBaseAddressKeyword = segmentMap[segment];
           result += `
             @${segmentBaseAddressKeyword}
@@ -42,8 +44,10 @@ export function translate(instruction, fileBaseName) {
             M=M+1
           `;
           break;
+        }
         case "temp": // push temp __
-        case "pointer": // push pointer __
+        case "pointer": {
+          // push pointer __
           const baseAddress = segment == "pointer" ? 3 : 5;
           const finalAddress = baseAddress + index;
           result += `
@@ -56,7 +60,9 @@ export function translate(instruction, fileBaseName) {
             M=M+1
           `;
           break;
-        case "constant": // push constant __
+        }
+        case "constant": {
+          // push constant __
           const constant = words[2];
           result += `
             @${constant}
@@ -68,7 +74,8 @@ export function translate(instruction, fileBaseName) {
             M=M+1
           `;
           break;
-        case "static":
+        }
+        case "static": {
           const symbol = `${fileBaseName}.${index}`;
           result += `
             @${symbol}
@@ -80,11 +87,15 @@ export function translate(instruction, fileBaseName) {
             M=M+1
           `;
           break;
-        default:
+        }
+        default: {
           throw Error("Unknown memory segment:", segment);
+        }
       }
       break;
-    case "pop": // pop __ __
+    }
+    case "pop": {
+      // pop __ __
       // Pop with no arguments will simply push the topmost item off the stack
       if (words.length == 1) {
         result += `
@@ -95,14 +106,15 @@ export function translate(instruction, fileBaseName) {
       }
 
       // Pop has been called with arguments
-      segment = words[1];
-      index = words[2];
+      const segment = words[1];
+      const index = Number(words[2]);
 
       switch (segment) {
         case "local": // pop local __
         case "argument": // pop argument __
         case "this": // pop this __
-        case "that": // pop that __
+        case "that": {
+          // pop that __
           const segmentBaseAddressKeyword = segmentMap[segment];
           result += `
             @${segmentBaseAddressKeyword}
@@ -114,13 +126,14 @@ export function translate(instruction, fileBaseName) {
             @SP
             AM=M-1
             D=M
-            @R14
+            @R13
             A=M
             M=D
           `;
           break;
+        }
         case "temp":
-        case "pointer":
+        case "pointer": {
           const baseAddress = segment == "pointer" ? 3 : 5;
           const finalAddress = baseAddress + index;
           result += `
@@ -131,7 +144,8 @@ export function translate(instruction, fileBaseName) {
             M=D
           `;
           break;
-        case "static":
+        }
+        case "static": {
           const symbol = `${fileBaseName}.${index}`;
           result += `
             @SP
@@ -141,50 +155,61 @@ export function translate(instruction, fileBaseName) {
             M=D
           `;
           break;
-        case "constant":
+        }
+        case "constant": {
           throw Error("Constant is not a valid segment for the pop operation.");
-        default:
+        }
+        default: {
           throw Error("Unknown segment:", segment);
+        }
       }
       break;
-    case "add": // add
-      result += ` 
-      @SP
-      A=M-1
-      D=M
-      A=A-1
-      M=D+M
-      @SP
-      M=M-1
-      `;
-      break;
-    case "sub": // sub
+    }
+    case "add": {
+      // add
       result += `
       @SP
-      A=M-1
-      D=M
+      AM=M-1
       A=A-1
-      M=D-M
-      @SP
-      M=M-1
+      D=M
+      A=A+1
+      D=D+M
+      A=A-1
+      M=D
       `;
       break;
-    case "neg": // neg
+    }
+    case "sub": {
+      // sub
+      result += `
+      @SP
+      AM=M-1
+      A=A-1
+      D=M
+      A=A+1
+      D=D-M
+      A=A-1
+      M=D
+      `;
+      break;
+    }
+    case "neg": {
+      // neg
       result += `
       @SP
       A=M-1
       M=-M
       `;
       break;
-    case "eq": // eq
+    }
+    case "eq": {
+      // eq
       result += `
         @SP
         M=M-1
-        A=M
+        AM=M-1
         D=M
-        @SP
-        M=M-1
-        A=M
+        A=A+1
         D=D-M
         @WHEN_EQUAL_${uuid}
         D;JEQ
@@ -203,15 +228,15 @@ export function translate(instruction, fileBaseName) {
             M=M+1
         (END_${uuid})`;
       break;
-    case "gt": //gt
+    }
+    case "gt": {
+      //gt
       result += `
         @SP
         M=M-1
-        A=M
+        AM=M-1
         D=M
-        @SP
-        M=M-1
-        A=M
+        A=A+1
         D=D-M
         @WHEN_GREATER_${uuid}
         D;JGT
@@ -230,15 +255,15 @@ export function translate(instruction, fileBaseName) {
             M=M+1
         (END_${uuid})`;
       break;
-    case "lt": // lt
+    }
+    case "lt": {
+      // lt
       result += `
         @SP
         M=M-1
-        A=M
+        AM=M-1
         D=M
-        @SP
-        M=M-1
-        A=M
+        A=A+1
         D=D-M
         @WHEN_LESS_${uuid}
         D;JLT
@@ -258,7 +283,8 @@ export function translate(instruction, fileBaseName) {
         (END_${uuid})
         `;
       break;
-    case "and":
+    }
+    case "and": {
       result += `
       @SP
       A=M-1
@@ -269,7 +295,8 @@ export function translate(instruction, fileBaseName) {
       M=M-1
       `;
       break;
-    case "or":
+    }
+    case "or": {
       result += `
         @SP
         A=M-1
@@ -280,13 +307,15 @@ export function translate(instruction, fileBaseName) {
         M=M-1
         `;
       break;
-    case "not":
+    }
+    case "not": {
       result += `
         @SP
         A=M-1
         M=!M
         `;
       break;
+    }
   }
 
   return result;
