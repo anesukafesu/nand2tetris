@@ -43,9 +43,18 @@ export async function writeInstructionsToFile(instructions, filePath) {
       curr
         .split("\n")
         .map((line) => line.trim())
-        .join("\n") +
-      "\n"
+        .join("\n")
     );
   }, "");
-  await writeFile(filePath, code, "utf-8");
+  await writeFile(filePath, normalizeLineEndings(code), "utf-8");
+}
+
+/**
+ * Normalises a text by ensuring consistent line endings.
+ * @param {string} str The text to normalise.
+ * @param {string} normalized The character to use to normalise
+ * @returns {string} The normalised text
+ */
+function normalizeLineEndings(str, normalized = "\n") {
+  return str.replace(/\r?\n/g, normalized);
 }
