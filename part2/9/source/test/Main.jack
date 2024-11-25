@@ -1,0 +1,13 @@
+class Main {
+    function void main() {
+        var int i;
+        let i = 0;
+
+        while (i < 32) {
+            do Memory.poke(16384 + (i * 32), -1);
+            do Memory.poke(16385 + (i * 32), -1);
+            let i = i + 1;
+        }
+        return;
+    }
+}

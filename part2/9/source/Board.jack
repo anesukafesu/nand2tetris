@@ -1,0 +1,246 @@
+class Board {
+    field Array squares;
+    field char turn;
+    field Position blackKingPosition, whiteKingPosition;
+
+    constructor Board new () {
+        var int i, j;
+        var Array row;
+        var char squareColour;
+
+        // Initialising board to 64 squares
+        let squares = Array.new(8);
+        let i = 0;
+        while (i < 8) {
+            let squares[i] = Array.new(8);
+            let j = 0;
+
+            while (j < 8) {
+                if (Board.mod(i, 2) = Board.mod(j, 2)) {
+                    let squareColour = 66;
+                } else {
+                    let squareColour = 87;
+                }
+
+                let row = squares[i];
+                let row[j] = Square.new(squareColour);
+                let j = j + 1;
+            }
+
+            let i = i + 1;
+        }
+
+        // By default, white starts
+        // turn = 'W'
+        let turn = 87;
+
+        // Setting the pieces onto the board
+        do setBoard();
+
+        // Initialise the king's positions
+        let whiteKingPosition = Position.new(4, 0);
+        let blackKingPosition = Position.new(4, 7);
+
+        return this;
+    }
+
+    function int mod(int x, int y) {
+        return x - Math.multiply(y, Math.divide(x, y));
+    }
+
+    method Position getKingsPosition(char colour) {
+        if (colour = 87) {
+            return whiteKingPosition;
+        } else {
+            return blackKingPosition;
+        }
+    }
+
+    method int movePiece(String movement) {
+        var char fromLetter, fromNumber, toLetter, toNumber;
+        var int fromRow, fromCol, toRow, toCol;
+        var Square fromSquare, toSquare;
+        var Piece pieceToBeMoved, pieceAtDestination;
+        var boolean isValidMove, isPlayersPiece, isValidDestination, isAnActualMove;
+
+        // Extract properties
+        let fromLetter = movement.charAt(0);
+        let fromNumber = movement.charAt(1);
+        let toLetter = movement.charAt(2);
+        let toNumber = movement.charAt(3);
+
+        // Calculate coordinates
+        let fromRow = Conversions.letterToNumber(fromLetter);
+        let fromCol = Conversions.parseNumber(fromNumber) - 1;
+        let toRow = Conversions.letterToNumber(toLetter);
+        let toCol = Conversions.parseNumber(toNumber) - 1;
+
+        // If it is not an actual move
+        // i.e. the start is the destination
+        // return with error code 1
+        if ((fromCol = toCol) & (fromRow = toRow)) {
+            return 1;
+        }
+
+        // Getting the squares
+        let fromSquare = getSquare(fromCol, fromRow);
+        let toSquare = getSquare(toCol, toRow);
+
+        // Get the pieces at from and to squares
+        let pieceToBeMoved = fromSquare.getPiece();
+        let pieceAtDestination = toSquare.getPiece();
+
+        // If there's no piece at the from position,
+        // return error code 2
+        if (pieceToBeMoved = 0) {
+            return 2;
+        }
+
+        // If the piece does not belong to the player
+        // return error code 3
+        let isPlayersPiece = pieceToBeMoved.getColour() = turn;
+        if (~isPlayersPiece) {
+            return 3;
+        }
+
+        // Validate if the destination is free or the piece
+        // there can be captured
+        let isValidDestination = Validators.validateDestination(this, turn, toRow, toCol);
+        if (~isValidDestination) {
+            return 4;
+        }
+
+        // Validate the move
+        let isValidMove = Validators.validateMove(this, pieceToBeMoved.getType(), turn, fromRow, fromCol, toRow, toCol);
+        if (~isValidMove) {
+            return 5;
+        }
+
+        // Move the piece
+        do fromSquare.removePiece();
+        do toSquare.setPiece(pieceToBeMoved);
+
+        // If the piece is a king, we update the king's positions
+        if (pieceToBeMoved.getType() = 75) {
+            if (pieceToBeMoved.getColour() = 66) {
+                do blackKingPosition.setCol(toCol);
+                do blackKingPosition.setRow(toRow);
+            } else {
+                do whiteKingPosition.setCol(toCol);
+                do blackKingPosition.setRow(toRow);
+            }
+        }
+
+        return 0;
+    }
+
+    method void promotePieces() {
+        var int count;
+        let count = 0;
+
+        while (count < 8) {
+            // Promotes all the black pieces
+            do promotePieceInSquareIfEligible(count, 0, 66);
+
+            // Promotes all the white pieces
+            do promotePieceInSquareIfEligible(count, 7, 87);
+
+            let count = count + 1;
+        }
+
+        return;
+    }
+
+    method void promotePieceInSquareIfEligible(int col, int row, int colour) {
+        var Square square;
+        var Piece piece;
+
+        let square = getSquare(col, row);
+        let piece = square.getPiece();
+
+        if ((piece.getType() = 80) & (piece.getColour() = colour)) {
+            do piece.promotePiece(81);
+        }
+        return;
+    }
+
+    method int getCurrentTurn() {
+        return turn;
+    }
+
+    method Square getSquare(int colNumber, int rowNumber) {
+        var Array row;
+        let row = squares[rowNumber];
+        return row[colNumber];
+    }
+
+    method void setBoard () {
+        // Setting the white back row
+        do setBackrow(87);
+
+        // Setting the black back row
+        do setBackrow(66);
+
+        // Setting the white front row
+        do setFrontRow(87);
+
+        // Setting the black front row
+        do setFrontRow(66);
+
+        return;
+    }
+
+     method void setFrontRow (char colour) {
+        var int base;
+        var int i;
+        var Square currentSquare;
+        if (colour = 127) {
+            let base = 9;
+        } else {
+            let base = 55;
+        }
+
+        let i = 0;
+        while (i < 8) {
+            let currentSquare = squares[base + i];
+            do currentSquare.setPiece(Piece.new(120, colour));
+            let i = i + 1;
+        }
+        return;
+    } 
+
+    method void setBackrow (char colour) {
+        var Square currentSquare;
+        var int base;
+        if (colour = 127) {
+            let base = 0;
+        } else {
+            let base = 56;
+        }
+
+        let currentSquare = squares[base + 0];
+        do currentSquare.setPiece(Piece.new(122, colour));
+
+        let currentSquare = squares[base + 1];
+        do currentSquare.setPiece(Piece.new(116, colour));
+
+        let currentSquare = squares[base + 2];
+        do currentSquare.setPiece(Piece.new(102, colour));
+
+        let currentSquare = squares[base + 3];
+        do currentSquare.setPiece(Piece.new(113, colour));
+
+        let currentSquare = squares[base + 4];
+        do currentSquare.setPiece(Piece.new(121, colour));
+
+        let currentSquare = squares[base + 5];
+        do currentSquare.setPiece(Piece.new(102, colour));
+
+        let currentSquare = squares[base + 6];
+        do currentSquare.setPiece(Piece.new(116, colour));
+
+        let currentSquare = squares[base + 7];
+        do currentSquare.setPiece(Piece.new(122, colour));
+        return;
+    }
+}

@@ -1,0 +1,17 @@
+class Direction {
+    field int rowDelta; field int colDelta;
+
+    constructor Direction new(int rowDeltaVal, int colDeltaVal) {
+        let rowDelta = rowDeltaVal;
+        let colDelta = colDeltaVal;
+        return this;
+    }
+
+    method int getRowDelta() {
+        return rowDelta;
+    }
+
+    method int getColDelta() {
+        return colDelta;
+    }
+}

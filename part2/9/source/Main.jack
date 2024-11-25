@@ -1,0 +1,8 @@
+class Main {
+    function void main () {
+        // do Game.run();
+        var String name;
+        let name = Keyboard.readLine("What is your name? ");
+        return;
+    }
+}

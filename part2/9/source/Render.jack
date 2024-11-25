@@ -1,0 +1,19 @@
+class Render {
+    field int baseAddress;
+    constructor Render new(int baseAddressVal) {
+        let baseAddress = baseAddressVal;
+        return this;
+    }
+
+    method void renderSquare(Square square) {
+        var int i;
+        let i = 0;
+
+        while (i < 32) {
+            let i = i + 1;
+        }
+
+        return;
+    }
+    
+}

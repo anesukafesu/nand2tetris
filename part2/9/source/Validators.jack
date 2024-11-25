@@ -1,0 +1,171 @@
+class Validators {
+    function boolean validateDestination(Board board, char turn, int col, int row) {
+        // A destination is valid if there is no piece there
+        if (Validators.isSquareFree(board, col, row)) {
+            return true;
+        }
+
+        // If there is a piece there,
+        // A destination is valid if the piece can be captured
+        return Validators.pieceInSquareCanBeCaptured(board, turn, col, row);
+    }
+
+    function boolean validateMove(Board board, char pieceType, char colour, int fromCol, int fromRow, int toCol, int toRow) {
+        var int rowDiff, colDiff, pawnForwardStep;
+        var Square square;
+
+        let rowDiff = toRow - fromRow;
+        let colDiff = toCol - fromCol;
+        
+        if (colour = 87) {
+            let pawnForwardStep = 1;
+        } else {
+            let pawnForwardStep = -1;
+        }
+
+        // Rook
+        if (pieceType = 82) {
+            return (fromCol = toCol) | (fromRow = toRow);
+        }
+
+        // Knight
+        if (pieceType = 78) {
+            return ((Math.abs(colDiff) = 1) & (Math.abs(rowDiff) = 2)) | ((Math.abs(colDiff) = 2) & (Math.abs(rowDiff) = 1));
+        }
+
+        // Bishop
+        if (pieceType = 66) {
+            return (Math.abs(colDiff) = Math.abs(rowDiff));
+        }
+
+        // Queen
+        if (pieceType = 81) {
+            return (colDiff) | (rowDiff) | (Math.abs(colDiff) = Math.abs(rowDiff));
+        }
+
+        // King
+        if (pieceType = 75) {
+            return Validators.lte(Math.abs(colDiff), 1) & Validators.lte(Math.abs(rowDiff), 1);
+        }
+
+        // Pawn
+        if (pieceType = 80) {
+            // Forward non-capture movement
+            if (colDiff = 0) {
+                // Check the next square forward to determine if its free
+                if (~Validators.isSquareFree(board, fromCol, fromRow + pawnForwardStep)) {
+                    return false;
+                }
+
+                // Square is free, check if it is one step forward
+                if (rowDiff = pawnForwardStep) {
+                    return true;
+                }
+
+                // Check if the second square forward is also free
+                if (~Validators.isSquareFree(board, fromCol, fromRow + (2 * pawnForwardStep))) {
+                    return false;
+                }
+
+                // Square two steps forward is free, so we check if the movement is two steps forward
+                // And if the pawn is in its starting row.
+                if (Validators.isPawnInStartingRow(fromRow, colour) & rowDiff = (2 * pawnForwardStep)) {
+                    return true;
+                }
+
+                // The movement wasn't one or two-steps forward, so it invalid
+                return false;
+            }
+
+            // Capturing a piece
+            if ((Math.abs(colDiff) = 1) & (rowDiff = pawnForwardStep)) {
+                // Make sure the piece in the destination, if any, can be captured
+                if (Validators.pieceInSquareCanBeCaptured(board,colour,toCol,toRow)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    function boolean pieceInSquareCanBeCaptured(Board board, char colour, int col, int row) {
+        var Square square;
+        var Piece piece;
+        let square = board.getSquare(col, row);
+        let piece = square.getPiece();
+
+        // There is no piece so it cannot be captured
+        if (piece = 0) {
+            return false;
+        }
+
+        // If the piece is a king, then it cannot be captured
+        if (piece.getType() = 75) {
+            return false;
+        }
+
+        // If the piece is of the same colour as the current piece, it cannot be captured
+        if (piece.getColour() = colour) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function boolean isSquareFree(Board board, int col, int row) {
+        return board.getSquare(col, row) = 0;
+    }
+
+    function boolean isPawnInStartingRow(int currentPositionRow, char colour) {
+        if (colour = 87 & currentPositionRow = 1) {
+            return true;
+        }
+
+        if (colour = 66 & currentPositionRow = 6) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function boolean lte (int a, int b) {
+        return a = b | a < b;
+    }
+
+    function boolean validateMovementString(String movement) {
+        var char c; var boolean valid;
+        if (~(movement.length() = 4)) {
+            return false;
+        }
+
+        // Validate the characters to ensure they are within
+        // the right ranges. 
+        // i.e. between A-H for letter, 1 and 8 for numbers.
+        let c = movement.charAt(0);
+        let valid = valid & Validators.validateLetter(c);
+
+        let c = movement.charAt(1);
+        let valid = valid & Validators.validateNumber(c);
+
+        let c = movement.charAt(2);
+        let valid = valid & Validators.validateLetter(c);
+
+        let c = movement.charAt(3);
+        let valid = valid & Validators.validateNumber(c);
+
+        return valid;
+    }
+
+    function boolean validateLetter(char letter) {
+        return (letter > 64) & (letter < 73);
+    }
+
+    function boolean validateNumber(char number) {
+        var int value;
+        let value = number - 48;
+        return (number > 0) & number < 9;
+    }
+}

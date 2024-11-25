@@ -1,0 +1,113 @@
+function Conversions.letterToNumber 0
+    push argument 0
+    push constant 1
+    call String.new 1
+    push constant 65
+    call String.appendChar 2
+    eq
+    not
+    if-goto Conversions_1
+    push constant 0
+    return
+    goto Conversions_0
+label Conversions_1
+label Conversions_0
+    push argument 0
+    push constant 1
+    call String.new 1
+    push constant 66
+    call String.appendChar 2
+    eq
+    not
+    if-goto Conversions_3
+    push constant 1
+    return
+    goto Conversions_2
+label Conversions_3
+label Conversions_2
+    push argument 0
+    push constant 1
+    call String.new 1
+    push constant 67
+    call String.appendChar 2
+    eq
+    not
+    if-goto Conversions_5
+    push constant 2
+    return
+    goto Conversions_4
+label Conversions_5
+label Conversions_4
+    push argument 0
+    push constant 1
+    call String.new 1
+    push constant 68
+    call String.appendChar 2
+    eq
+    not
+    if-goto Conversions_7
+    push constant 3
+    return
+    goto Conversions_6
+label Conversions_7
+label Conversions_6
+    push argument 0
+    push constant 1
+    call String.new 1
+    push constant 69
+    call String.appendChar 2
+    eq
+    not
+    if-goto Conversions_9
+    push constant 4
+    return
+    goto Conversions_8
+label Conversions_9
+label Conversions_8
+    push argument 0
+    push constant 1
+    call String.new 1
+    push constant 70
+    call String.appendChar 2
+    eq
+    not
+    if-goto Conversions_11
+    push constant 5
+    return
+    goto Conversions_10
+label Conversions_11
+label Conversions_10
+    push argument 0
+    push constant 1
+    call String.new 1
+    push constant 71
+    call String.appendChar 2
+    eq
+    not
+    if-goto Conversions_13
+    push constant 6
+    return
+    goto Conversions_12
+label Conversions_13
+label Conversions_12
+    push argument 0
+    push constant 1
+    call String.new 1
+    push constant 72
+    call String.appendChar 2
+    eq
+    not
+    if-goto Conversions_15
+    push constant 0
+    return
+    goto Conversions_14
+label Conversions_15
+label Conversions_14
+    push constant 1
+    neg
+    return
+function Conversions.parseNumber 0
+    push argument 0
+    push constant 48
+    sub
+    return

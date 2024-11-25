@@ -1,0 +1,56 @@
+class Game {
+    function void run () {
+        var Board board;
+        var boolean checkmate;
+        var String movement;
+        var boolean movementStringIsValid;
+        var String movementPrompt;
+        var Position playerKingsPosition, opponentKingsPosition;
+
+        let board = Board.new();
+        let checkmate = false;
+
+        while (~checkmate) {
+            // Position of current player's king
+            let playerKingsPosition = board.getKingsPosition(board.getCurrentTurn());
+
+            // Check if the king is in check
+            if (Check.checkIfKingIsInCheck(board, playerKingsPosition, board.getCurrentTurn())) {
+                // Check if checkmate
+            }
+
+            if (board.getCurrentTurn() = 87) {
+                let movementPrompt = "W: ";
+            } else {
+                let movementPrompt = "B: ";
+            }
+
+            let movement = Keyboard.readLine(movementPrompt);
+            let movementStringIsValid = Validators.validateMovementString(movement);
+            
+            if (movementStringIsValid) {
+                do board.movePiece(movement);
+
+                // Is current player's king in check
+               if (Check.checkIfKingIsInCheck(board, playerKingsPosition, 87)) {
+                    // Then the move just made either put or left the king in check
+                    // Either way it is invalid, so we reverse it
+                    do board.movePiece(Game.reverseMovementString(movement));
+                }
+            }
+        }
+        return;
+    }
+
+    function String reverseMovementString(String movement) {
+        var String reversedMovement;
+
+        let reversedMovement = String.new(4);
+        do reversedMovement.setCharAt(0, movement.charAt(2));
+        do reversedMovement.setCharAt(1, movement.charAt(3));
+        do reversedMovement.setCharAt(2, movement.charAt(0));
+        do reversedMovement.setCharAt(3, movement.charAt(1));
+
+        return reversedMovement;
+    }
+}

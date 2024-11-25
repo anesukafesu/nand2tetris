@@ -1,0 +1,27 @@
+class Square {
+    field Piece piece;
+    field char colour;
+
+    constructor Square new(char colourVal) {
+        let colour = colourVal;
+        return this;
+    }
+
+    method void setPiece (Piece newPiece) {
+        if (~(piece = 0)) {
+            // do piece.dispose();
+        }
+
+        let piece = newPiece;
+        return;
+    }
+
+    method Piece getPiece () {
+        return piece;
+    }
+
+    method void removePiece() {
+        let piece = 0;
+        return;
+    }
+}

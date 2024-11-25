@@ -1,0 +1,212 @@
+class Check {
+    function boolean checkIfKingIsInCheck(Board board, Position kingsPosition, char colour) {
+        if (Check.searchForAttackingKnights(board, kingsPosition.getCol(), kingsPosition.getRow(), colour)) {
+            return true;
+        }
+
+        if (Check.searchForAttackingBishopsAndQueens(board, kingsPosition.getCol(), kingsPosition.getRow(), colour)) {
+            return true;
+        }
+
+        if (Check.searchForAttackingRooksAndQueens(board, kingsPosition.getCol(), kingsPosition.getRow(), colour)) {
+            return true;
+        }
+
+        if (Check.searchForAttackingPawns(board, kingsPosition.getCol(), kingsPosition.getRow(), colour)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function boolean searchForAttackingKnights(Board board, int startCol, int startRow, char colour) {
+        var KnightMovement knightMovement;
+        var Square square;
+        var Array movements;
+        var Piece piece;
+        var int count, colToCheck, rowToCheck;
+        var boolean rowValid, colValid;
+
+        let movements = Array.new(8);
+        let movements[0] = KnightMovement.new(1, 2);
+        let movements[1] = KnightMovement.new(2, 1);
+        let movements[2] = KnightMovement.new(2, -1);
+        let movements[3] = KnightMovement.new(1, -2);
+        let movements[4] = KnightMovement.new(-2, -1);
+        let movements[5] = KnightMovement.new(-1, -2);
+        let movements[6] = KnightMovement.new(-1, 2);
+        let movements[7] = KnightMovement.new(-2, 1);
+
+        let count = 0;
+        while (count < 8) {
+            let knightMovement = movements[count];
+            let colToCheck = startCol + knightMovement.getColJump();
+            let rowToCheck = startRow + knightMovement.getRowJump();
+            let colValid = (colToCheck > -1) & (colToCheck < 8);
+            let rowValid = (rowToCheck > -1) & (rowToCheck < 8);
+
+            if (colValid & rowValid) {
+                let square = board.getSquare(startCol, startRow);
+                let piece = square.getPiece();
+
+                if (piece.getType() = 75 & piece.getColour() = colour) {
+                    return true;
+                }
+            }
+
+            let count = count + 1;
+        }
+        return false;
+    }
+
+    function boolean searchForAttackingBishopsAndQueens(Board board, int startCol, int startRow, char colour) {
+        var int count, nDirections;
+        var Array directions;
+        var boolean found;
+        var Direction currentDirection;
+        let nDirections = 4;
+
+        let directions = Array.new(nDirections);
+        let directions[0] = Direction.new(1, 1);
+        let directions[1] = Direction.new(-1, 1);
+        let directions[2] = Direction.new(-1, -1);
+        let directions[4] = Direction.new(1, -1);
+
+        let count = 0;
+
+        while (count < nDirections) {
+            let currentDirection = directions[count];
+            let found = Check.searchInDirection(board, startRow, startCol, currentDirection.getColDelta(), currentDirection.getRowDelta(), "BQ", colour, -1);
+
+            if (found) {
+                return true;
+            }
+
+            let count = count + 1;
+        }
+
+        return false;
+    }
+
+    function boolean searchForAttackingRooksAndQueens(Board board, int startCol, int startRow, char colour) {
+        var int count, nDirections;
+        var Array directions;
+        var boolean found;
+        var Direction currentDirection;
+        let nDirections = 4;
+
+        let directions = Array.new(nDirections);
+        let directions[0] = Direction.new(1, 0);
+        let directions[1] = Direction.new(0, 1);
+        let directions[2] = Direction.new(-1, 0);
+        let directions[4] = Direction.new(0, -1);
+
+        let count = 0;
+
+        while (count < nDirections) {
+            let currentDirection = directions[count];
+            let found = Check.searchInDirection(board, startRow, startCol, currentDirection.getColDelta(), currentDirection.getRowDelta(), "RQ", colour, -1);
+
+            if (found) {
+                return true;
+            }
+
+            let count = count + 1;
+        }
+
+        return false;
+    }
+
+    function boolean searchForAttackingPawns(Board board, int startCol, int startRow, char colour) {
+        var int count, nDirections;
+        var Array directions;
+        var boolean found;
+        var Direction direction;
+        let nDirections = 2;
+
+        let directions = Array.new(nDirections);
+        
+        if (colour = 87) {
+            // White pawns only attack forward in 1 direction 
+            let directions[0] = Direction.new(1, -1);
+            let directions[1] = Direction.new(-1, -1);
+        } else {
+            let directions[0] = Direction.new(1, 1);
+            let directions[1] = Direction.new(-1, 1);
+        }
+
+        let count = 0;
+
+        while (count < nDirections) {
+            let direction = directions[count];
+            let found = Check.searchInDirection(board, startRow, startCol, direction.getColDelta(), direction.getRowDelta(), "P", colour, 1);
+
+            if (found) {
+                return true;
+            }
+
+            let count = count + 1;
+        }
+
+        return false;
+    }
+
+    function boolean searchInDirection(Board board, int startCol, int startRow, int colDelta, int rowDelta, String pieces, char colour, int maxSteps) {
+        var int rowLimit, colLimit, rowCount, colCount, charCount, stepCount;
+        var Square square;
+        var Piece piece;
+        var boolean found, rightColour;
+
+        let rowCount = startRow;
+        let colCount = startCol;
+        let rowLimit = 0;
+        let colLimit = 0;
+        let stepCount = 0;
+
+        if (rowDelta > 0) {
+            let rowLimit = 7;
+        }
+
+        if (colDelta > 0) {
+            let colLimit = 7;
+        }
+
+        while ((rowCount < rowLimit) & (colCount < colLimit)) {
+            let square = board.getSquare(colCount, rowCount);
+            let piece = square.getPiece();
+
+            if (~(piece = 0)) {
+                // If a piece is in the square and it isn't the colour we are looking for
+                // then no other pieces in that direction can attack
+                let rightColour = piece.getColour() = colour;
+                if (~rightColour) {
+                    return false;
+                }
+
+                // Safely assume that the piece is of the colour we are looking for
+                // Now, we check if it is of the any of the provided types
+                let found = false;
+                let charCount = 0;
+
+                while (charCount < pieces.length()) {
+                    let found = found | (pieces.charAt(charCount) = piece.getType());
+                    let charCount = charCount + 1;
+                }
+
+                // If it matched any type, found will be true, else false
+                // Either way, we return that condition and stop the search in that direction
+                return found;
+            }
+
+            let rowCount = rowCount + rowDelta;
+            let colCount = colCount + colDelta;
+            let stepCount = stepCount + 1;
+
+            if ((maxSteps > 0) & (stepCount = maxSteps)) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+}

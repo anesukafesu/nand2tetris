@@ -1,0 +1,27 @@
+class Position {
+    field int col, row;
+
+    constructor Position new(int colVal, int rowVal) {
+        let col = colVal;
+        let row = rowVal;
+        return this;
+    }
+
+    method int getCol() {
+        return col;
+    }
+
+    method int getRow() {
+        return row;
+    }
+
+    method void setCol(int colVal) {
+        let col = colVal;
+        return;
+    } 
+
+    method void setRow(int rowVal) {
+        let row = rowVal;
+        return;
+    }
+}

@@ -1,0 +1,23 @@
+class Piece {
+    field char type;
+    field char colour;
+
+    constructor Piece new(char nType, char nColour) {
+        let type = nType;
+        let colour = nColour;
+        return this;
+    }
+
+    method void promotePiece (char promoteTo) {
+        let type = promoteTo;
+        return;
+    }
+
+    method char getType () {
+        return type;
+    }
+
+    method char getColour () {
+        return colour;
+    }
+}

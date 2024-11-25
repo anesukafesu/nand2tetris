@@ -1,0 +1,17 @@
+class KnightMovement {
+    field int colJump, rowJump;
+
+    constructor KnightMovement new(int colJumpVal, int rowJumpVal) {
+        let colJump = colJumpVal;
+        let rowJump = rowJumpVal;
+        return this;
+    }
+
+    method int getColJump() {
+        return colJump;
+    }
+
+    method int getRowJump() {
+        return rowJump;
+    }
+}

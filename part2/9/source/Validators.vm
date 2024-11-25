@@ -1,0 +1,408 @@
+function Validators.validateDestination 0
+    push argument 0
+    push argument 2
+    push argument 3
+    call Validators.isSquareFree 3
+    not
+    if-goto Validators_1
+    push constant 1
+    neg
+    return
+    goto Validators_0
+label Validators_1
+label Validators_0
+    push argument 0
+    push argument 1
+    push argument 2
+    push argument 3
+    call Validators.pieceInSquareCanBeCaptured 4
+    return
+function Validators.validateMove 4
+    push argument 6
+    push argument 4
+    sub
+    pop local 0
+    push argument 5
+    push argument 3
+    sub
+    pop local 1
+    push argument 2
+    push constant 87
+    eq
+    not
+    if-goto Validators_3
+    push constant 1
+    pop local 2
+    goto Validators_2
+label Validators_3
+    push constant 1
+    neg
+    pop local 2
+label Validators_2
+    push argument 1
+    push constant 82
+    eq
+    not
+    if-goto Validators_5
+    push argument 3
+    push argument 5
+    eq
+    push argument 4
+    push argument 6
+    eq
+    or
+    return
+    goto Validators_4
+label Validators_5
+label Validators_4
+    push argument 1
+    push constant 78
+    eq
+    not
+    if-goto Validators_7
+    push local 1
+    call Math.abs 1
+    push constant 1
+    eq
+    push local 0
+    call Math.abs 1
+    push constant 2
+    eq
+    and
+    push local 1
+    call Math.abs 1
+    push constant 2
+    eq
+    push local 0
+    call Math.abs 1
+    push constant 1
+    eq
+    and
+    or
+    return
+    goto Validators_6
+label Validators_7
+label Validators_6
+    push argument 1
+    push constant 66
+    eq
+    not
+    if-goto Validators_9
+    push local 1
+    call Math.abs 1
+    push local 0
+    call Math.abs 1
+    eq
+    return
+    goto Validators_8
+label Validators_9
+label Validators_8
+    push argument 1
+    push constant 81
+    eq
+    not
+    if-goto Validators_11
+    push local 1
+    push local 0
+    or
+    push local 1
+    call Math.abs 1
+    push local 0
+    call Math.abs 1
+    eq
+    or
+    return
+    goto Validators_10
+label Validators_11
+label Validators_10
+    push argument 1
+    push constant 75
+    eq
+    not
+    if-goto Validators_13
+    push local 1
+    call Math.abs 1
+    push constant 1
+    call Validators.lte 2
+    push local 0
+    call Math.abs 1
+    push constant 1
+    call Validators.lte 2
+    and
+    return
+    goto Validators_12
+label Validators_13
+label Validators_12
+    push argument 1
+    push constant 80
+    eq
+    not
+    if-goto Validators_15
+    push local 1
+    push constant 0
+    eq
+    not
+    if-goto Validators_17
+    push argument 0
+    push argument 3
+    push argument 4
+    push local 2
+    add
+    call Validators.isSquareFree 3
+    not
+    not
+    if-goto Validators_19
+    push constant 0
+    return
+    goto Validators_18
+label Validators_19
+label Validators_18
+    push local 0
+    push local 2
+    eq
+    not
+    if-goto Validators_21
+    push constant 1
+    neg
+    return
+    goto Validators_20
+label Validators_21
+label Validators_20
+    push argument 0
+    push argument 3
+    push argument 4
+    push constant 2
+    push local 2
+    call Math.multiply 2
+    add
+    call Validators.isSquareFree 3
+    not
+    not
+    if-goto Validators_23
+    push constant 0
+    return
+    goto Validators_22
+label Validators_23
+label Validators_22
+    push argument 4
+    push argument 2
+    call Validators.isPawnInStartingRow 2
+    push local 0
+    and
+    push constant 2
+    push local 2
+    call Math.multiply 2
+    eq
+    not
+    if-goto Validators_25
+    push constant 1
+    neg
+    return
+    goto Validators_24
+label Validators_25
+label Validators_24
+    push constant 0
+    return
+    goto Validators_16
+label Validators_17
+label Validators_16
+    push local 1
+    call Math.abs 1
+    push constant 1
+    eq
+    push local 0
+    push local 2
+    eq
+    and
+    not
+    if-goto Validators_27
+    push argument 0
+    push argument 2
+    push argument 5
+    push argument 6
+    call Validators.pieceInSquareCanBeCaptured 4
+    not
+    if-goto Validators_29
+    push constant 1
+    neg
+    return
+    goto Validators_28
+label Validators_29
+    push constant 0
+    return
+label Validators_28
+    goto Validators_26
+label Validators_27
+label Validators_26
+    goto Validators_14
+label Validators_15
+label Validators_14
+    push constant 0
+    return
+function Validators.pieceInSquareCanBeCaptured 2
+    push argument 0
+    push argument 2
+    push argument 3
+    call Board.getSquare 3
+    pop local 0
+    push local 0
+    call Square.getPiece 1
+    pop local 1
+    push local 1
+    push constant 0
+    eq
+    not
+    if-goto Validators_31
+    push constant 0
+    return
+    goto Validators_30
+label Validators_31
+label Validators_30
+    push local 1
+    call Piece.getType 1
+    push constant 75
+    eq
+    not
+    if-goto Validators_33
+    push constant 0
+    return
+    goto Validators_32
+label Validators_33
+label Validators_32
+    push local 1
+    call Piece.getColour 1
+    push argument 1
+    eq
+    not
+    if-goto Validators_35
+    push constant 0
+    return
+    goto Validators_34
+label Validators_35
+label Validators_34
+    push constant 1
+    neg
+    return
+function Validators.isSquareFree 0
+    push argument 0
+    push argument 1
+    push argument 2
+    call Board.getSquare 3
+    push constant 0
+    eq
+    return
+function Validators.isPawnInStartingRow 0
+    push argument 1
+    push constant 87
+    eq
+    push argument 0
+    and
+    push constant 1
+    eq
+    not
+    if-goto Validators_37
+    push constant 1
+    neg
+    return
+    goto Validators_36
+label Validators_37
+label Validators_36
+    push argument 1
+    push constant 66
+    eq
+    push argument 0
+    and
+    push constant 6
+    eq
+    not
+    if-goto Validators_39
+    push constant 1
+    neg
+    return
+    goto Validators_38
+label Validators_39
+label Validators_38
+    push constant 0
+    return
+function Validators.lte 0
+    push argument 0
+    push argument 1
+    eq
+    push argument 0
+    or
+    push argument 1
+    lt
+    return
+function Validators.validateMovementString 2
+    push argument 0
+    call String.length 1
+    push constant 4
+    eq
+    not
+    not
+    if-goto Validators_41
+    push constant 0
+    return
+    goto Validators_40
+label Validators_41
+label Validators_40
+    push argument 0
+    push constant 0
+    call String.charAt 2
+    pop local 0
+    push local 1
+    push local 0
+    call Validators.validateLetter 1
+    and
+    pop local 1
+    push argument 0
+    push constant 1
+    call String.charAt 2
+    pop local 0
+    push local 1
+    push local 0
+    call Validators.validateNumber 1
+    and
+    pop local 1
+    push argument 0
+    push constant 2
+    call String.charAt 2
+    pop local 0
+    push local 1
+    push local 0
+    call Validators.validateLetter 1
+    and
+    pop local 1
+    push argument 0
+    push constant 3
+    call String.charAt 2
+    pop local 0
+    push local 1
+    push local 0
+    call Validators.validateNumber 1
+    and
+    pop local 1
+    push local 1
+    return
+function Validators.validateLetter 0
+    push argument 0
+    push constant 64
+    gt
+    push argument 0
+    push constant 73
+    lt
+    and
+    return
+function Validators.validateNumber 1
+    push argument 0
+    push constant 48
+    sub
+    pop local 0
+    push argument 0
+    push constant 0
+    gt
+    push argument 0
+    and
+    push constant 9
+    lt
+    return

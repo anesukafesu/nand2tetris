@@ -1,0 +1,20 @@
+function Test.test 2
+    push constant 5
+    call String.new 1
+    push constant 65
+    call String.appendChar 2
+    push constant 110
+    call String.appendChar 2
+    push constant 101
+    call String.appendChar 2
+    push constant 115
+    call String.appendChar 2
+    push constant 117
+    call String.appendChar 2
+    pop local 0
+    push local 0
+    push constant 0
+    call String.charAt 2
+    pop local 1
+    push constant 0
+    return

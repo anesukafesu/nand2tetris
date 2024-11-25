@@ -1,0 +1,120 @@
+function Game.run 7
+    call Board.new 0
+    pop local 0
+    push constant 0
+    pop local 1
+label Game_0
+    push local 1
+    not
+    not
+    if-goto Game_1
+    push local 0
+    push local 0
+    call Board.getCurrentTurn 1
+    call Board.getKingsPosition 2
+    pop local 5
+    push local 0
+    push local 5
+    push local 0
+    call Board.getCurrentTurn 1
+    call Check.checkIfKingIsInCheck 3
+    not
+    if-goto Game_3
+    goto Game_2
+label Game_3
+label Game_2
+    push local 0
+    call Board.getCurrentTurn 1
+    push constant 87
+    eq
+    not
+    if-goto Game_5
+    push constant 3
+    call String.new 1
+    push constant 87
+    call String.appendChar 2
+    push constant 58
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    pop local 4
+    goto Game_4
+label Game_5
+    push constant 3
+    call String.new 1
+    push constant 66
+    call String.appendChar 2
+    push constant 58
+    call String.appendChar 2
+    push constant 32
+    call String.appendChar 2
+    pop local 4
+label Game_4
+    push local 4
+    call Keyboard.readLine 1
+    pop local 2
+    push local 2
+    call Validators.validateMovementString 1
+    pop local 3
+    push local 3
+    not
+    if-goto Game_7
+    push local 0
+    push local 2
+    call Board.movePiece 2
+    pop temp 0
+    push local 0
+    push local 5
+    push constant 87
+    call Check.checkIfKingIsInCheck 3
+    not
+    if-goto Game_9
+    push local 0
+    push local 2
+    call Game.reverseMovementString 1
+    call Board.movePiece 2
+    pop temp 0
+    goto Game_8
+label Game_9
+label Game_8
+    goto Game_6
+label Game_7
+label Game_6
+    goto Game_0
+label Game_1
+    push constant 0
+    return
+function Game.reverseMovementString 1
+    push constant 4
+    call String.new 1
+    pop local 0
+    push local 0
+    push constant 0
+    push argument 0
+    push constant 2
+    call String.charAt 2
+    call String.setCharAt 3
+    pop temp 0
+    push local 0
+    push constant 1
+    push argument 0
+    push constant 3
+    call String.charAt 2
+    call String.setCharAt 3
+    pop temp 0
+    push local 0
+    push constant 2
+    push argument 0
+    push constant 0
+    call String.charAt 2
+    call String.setCharAt 3
+    pop temp 0
+    push local 0
+    push constant 3
+    push argument 0
+    push constant 1
+    call String.charAt 2
+    call String.setCharAt 3
+    pop temp 0
+    push local 0
+    return

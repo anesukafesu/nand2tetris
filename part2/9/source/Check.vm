@@ -1,0 +1,668 @@
+function Check.checkIfKingIsInCheck 0
+    push argument 0
+    push argument 1
+    call Position.getCol 1
+    push argument 1
+    call Position.getRow 1
+    push argument 2
+    call Check.searchForAttackingKnights 4
+    not
+    if-goto Check_1
+    push constant 1
+    neg
+    return
+    goto Check_0
+label Check_1
+label Check_0
+    push argument 0
+    push argument 1
+    call Position.getCol 1
+    push argument 1
+    call Position.getRow 1
+    push argument 2
+    call Check.searchForAttackingBishopsAndQueens 4
+    not
+    if-goto Check_3
+    push constant 1
+    neg
+    return
+    goto Check_2
+label Check_3
+label Check_2
+    push argument 0
+    push argument 1
+    call Position.getCol 1
+    push argument 1
+    call Position.getRow 1
+    push argument 2
+    call Check.searchForAttackingRooksAndQueens 4
+    not
+    if-goto Check_5
+    push constant 1
+    neg
+    return
+    goto Check_4
+label Check_5
+label Check_4
+    push argument 0
+    push argument 1
+    call Position.getCol 1
+    push argument 1
+    call Position.getRow 1
+    push argument 2
+    call Check.searchForAttackingPawns 4
+    not
+    if-goto Check_7
+    push constant 1
+    neg
+    return
+    goto Check_6
+label Check_7
+label Check_6
+    push constant 0
+    return
+function Check.searchForAttackingKnights 9
+    push constant 8
+    call Array.new 1
+    pop local 2
+    push constant 0
+    push local 2
+    add
+    push constant 1
+    push constant 2
+    call KnightMovement.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 1
+    push local 2
+    add
+    push constant 2
+    push constant 1
+    call KnightMovement.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 2
+    push local 2
+    add
+    push constant 2
+    push constant 1
+    neg
+    call KnightMovement.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 3
+    push local 2
+    add
+    push constant 1
+    push constant 2
+    neg
+    call KnightMovement.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 4
+    push local 2
+    add
+    push constant 2
+    neg
+    push constant 1
+    neg
+    call KnightMovement.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 5
+    push local 2
+    add
+    push constant 1
+    neg
+    push constant 2
+    neg
+    call KnightMovement.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 6
+    push local 2
+    add
+    push constant 1
+    neg
+    push constant 2
+    call KnightMovement.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 7
+    push local 2
+    add
+    push constant 2
+    neg
+    push constant 1
+    call KnightMovement.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 0
+    pop local 4
+label Check_8
+    push local 4
+    push constant 8
+    lt
+    not
+    if-goto Check_9
+    push local 4
+    push local 2
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push argument 1
+    push local 0
+    call KnightMovement.getColJump 1
+    add
+    pop local 5
+    push argument 2
+    push local 0
+    call KnightMovement.getRowJump 1
+    add
+    pop local 6
+    push local 5
+    push constant 1
+    neg
+    gt
+    push local 5
+    push constant 8
+    lt
+    and
+    pop local 8
+    push local 6
+    push constant 1
+    neg
+    gt
+    push local 6
+    push constant 8
+    lt
+    and
+    pop local 7
+    push local 8
+    push local 7
+    and
+    not
+    if-goto Check_11
+    push argument 0
+    push argument 1
+    push argument 2
+    call Board.getSquare 3
+    pop local 1
+    push local 1
+    call Square.getPiece 1
+    pop local 3
+    push local 3
+    call Piece.getType 1
+    push constant 75
+    eq
+    push local 3
+    call Piece.getColour 1
+    and
+    push argument 3
+    eq
+    not
+    if-goto Check_13
+    push constant 1
+    neg
+    return
+    goto Check_12
+label Check_13
+label Check_12
+    goto Check_10
+label Check_11
+label Check_10
+    push local 4
+    push constant 1
+    add
+    pop local 4
+    goto Check_8
+label Check_9
+    push constant 0
+    return
+function Check.searchForAttackingBishopsAndQueens 5
+    push constant 4
+    pop local 1
+    push local 1
+    call Array.new 1
+    pop local 2
+    push constant 0
+    push local 2
+    add
+    push constant 1
+    push constant 1
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 1
+    push local 2
+    add
+    push constant 1
+    neg
+    push constant 1
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 2
+    push local 2
+    add
+    push constant 1
+    neg
+    push constant 1
+    neg
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 4
+    push local 2
+    add
+    push constant 1
+    push constant 1
+    neg
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 0
+    pop local 0
+label Check_14
+    push local 0
+    push local 1
+    lt
+    not
+    if-goto Check_15
+    push local 0
+    push local 2
+    add
+    pop pointer 1
+    push that 0
+    pop local 4
+    push argument 0
+    push argument 2
+    push argument 1
+    push local 4
+    call Direction.getColDelta 1
+    push local 4
+    call Direction.getRowDelta 1
+    push constant 2
+    call String.new 1
+    push constant 66
+    call String.appendChar 2
+    push constant 81
+    call String.appendChar 2
+    push argument 3
+    push constant 1
+    neg
+    call Check.searchInDirection 8
+    pop local 3
+    push local 3
+    not
+    if-goto Check_17
+    push constant 1
+    neg
+    return
+    goto Check_16
+label Check_17
+label Check_16
+    push local 0
+    push constant 1
+    add
+    pop local 0
+    goto Check_14
+label Check_15
+    push constant 0
+    return
+function Check.searchForAttackingRooksAndQueens 5
+    push constant 4
+    pop local 1
+    push local 1
+    call Array.new 1
+    pop local 2
+    push constant 0
+    push local 2
+    add
+    push constant 1
+    push constant 0
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 1
+    push local 2
+    add
+    push constant 0
+    push constant 1
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 2
+    push local 2
+    add
+    push constant 1
+    neg
+    push constant 0
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 4
+    push local 2
+    add
+    push constant 0
+    push constant 1
+    neg
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 0
+    pop local 0
+label Check_18
+    push local 0
+    push local 1
+    lt
+    not
+    if-goto Check_19
+    push local 0
+    push local 2
+    add
+    pop pointer 1
+    push that 0
+    pop local 4
+    push argument 0
+    push argument 2
+    push argument 1
+    push local 4
+    call Direction.getColDelta 1
+    push local 4
+    call Direction.getRowDelta 1
+    push constant 2
+    call String.new 1
+    push constant 82
+    call String.appendChar 2
+    push constant 81
+    call String.appendChar 2
+    push argument 3
+    push constant 1
+    neg
+    call Check.searchInDirection 8
+    pop local 3
+    push local 3
+    not
+    if-goto Check_21
+    push constant 1
+    neg
+    return
+    goto Check_20
+label Check_21
+label Check_20
+    push local 0
+    push constant 1
+    add
+    pop local 0
+    goto Check_18
+label Check_19
+    push constant 0
+    return
+function Check.searchForAttackingPawns 5
+    push constant 2
+    pop local 1
+    push local 1
+    call Array.new 1
+    pop local 2
+    push argument 3
+    push constant 87
+    eq
+    not
+    if-goto Check_23
+    push constant 0
+    push local 2
+    add
+    push constant 1
+    push constant 1
+    neg
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 1
+    push local 2
+    add
+    push constant 1
+    neg
+    push constant 1
+    neg
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    goto Check_22
+label Check_23
+    push constant 0
+    push local 2
+    add
+    push constant 1
+    push constant 1
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 1
+    push local 2
+    add
+    push constant 1
+    neg
+    push constant 1
+    call Direction.new 2
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+label Check_22
+    push constant 0
+    pop local 0
+label Check_24
+    push local 0
+    push local 1
+    lt
+    not
+    if-goto Check_25
+    push local 0
+    push local 2
+    add
+    pop pointer 1
+    push that 0
+    pop local 4
+    push argument 0
+    push argument 2
+    push argument 1
+    push local 4
+    call Direction.getColDelta 1
+    push local 4
+    call Direction.getRowDelta 1
+    push constant 1
+    call String.new 1
+    push constant 80
+    call String.appendChar 2
+    push argument 3
+    push constant 1
+    call Check.searchInDirection 8
+    pop local 3
+    push local 3
+    not
+    if-goto Check_27
+    push constant 1
+    neg
+    return
+    goto Check_26
+label Check_27
+label Check_26
+    push local 0
+    push constant 1
+    add
+    pop local 0
+    goto Check_24
+label Check_25
+    push constant 0
+    return
+function Check.searchInDirection 10
+    push argument 2
+    pop local 2
+    push argument 1
+    pop local 3
+    push constant 0
+    pop local 0
+    push constant 0
+    pop local 1
+    push constant 0
+    pop local 5
+    push argument 4
+    push constant 0
+    gt
+    not
+    if-goto Check_29
+    push constant 7
+    pop local 0
+    goto Check_28
+label Check_29
+label Check_28
+    push argument 3
+    push constant 0
+    gt
+    not
+    if-goto Check_31
+    push constant 7
+    pop local 1
+    goto Check_30
+label Check_31
+label Check_30
+label Check_32
+    push local 2
+    push local 0
+    lt
+    push local 3
+    push local 1
+    lt
+    and
+    not
+    if-goto Check_33
+    push argument 0
+    push local 3
+    push local 2
+    call Board.getSquare 3
+    pop local 6
+    push local 6
+    call Square.getPiece 1
+    pop local 7
+    push local 7
+    push constant 0
+    eq
+    not
+    not
+    if-goto Check_35
+    push local 7
+    call Piece.getColour 1
+    push argument 6
+    eq
+    pop local 9
+    push local 9
+    not
+    not
+    if-goto Check_37
+    push constant 0
+    return
+    goto Check_36
+label Check_37
+label Check_36
+    push constant 0
+    pop local 8
+    push constant 0
+    pop local 4
+label Check_38
+    push local 4
+    push argument 5
+    call String.length 1
+    lt
+    not
+    if-goto Check_39
+    push local 8
+    push argument 5
+    push local 4
+    call String.charAt 2
+    push local 7
+    call Piece.getType 1
+    eq
+    or
+    pop local 8
+    push local 4
+    push constant 1
+    add
+    pop local 4
+    goto Check_38
+label Check_39
+    push local 8
+    return
+    goto Check_34
+label Check_35
+label Check_34
+    push local 2
+    push argument 4
+    add
+    pop local 2
+    push local 3
+    push argument 3
+    add
+    pop local 3
+    push local 5
+    push constant 1
+    add
+    pop local 5
+    push argument 7
+    push constant 0
+    gt
+    push local 5
+    push argument 7
+    eq
+    and
+    not
+    if-goto Check_41
+    push constant 0
+    return
+    goto Check_40
+label Check_41
+label Check_40
+    goto Check_32
+label Check_33
+    push constant 0
+    return

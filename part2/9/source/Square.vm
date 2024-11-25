@@ -1,0 +1,36 @@
+function Square.new 0
+    push constant 2
+    call Memory.alloc 1
+    pop pointer 0
+    push argument 0
+    pop this 1
+    push pointer 0
+    return
+function Square.setPiece 0
+    push argument 0
+    pop pointer 0
+    push this 0
+    push constant 0
+    eq
+    not
+    not
+    if-goto Square_1
+    goto Square_0
+label Square_1
+label Square_0
+    push argument 1
+    pop this 0
+    push constant 0
+    return
+function Square.getPiece 0
+    push argument 0
+    pop pointer 0
+    push this 0
+    return
+function Square.removePiece 0
+    push argument 0
+    pop pointer 0
+    push constant 0
+    pop this 0
+    push constant 0
+    return

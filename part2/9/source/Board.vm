@@ -1,0 +1,557 @@
+function Board.new 4
+    push constant 4
+    call Memory.alloc 1
+    pop pointer 0
+    push constant 8
+    call Array.new 1
+    pop this 0
+    push constant 0
+    pop local 0
+label Board_0
+    push local 0
+    push constant 8
+    lt
+    not
+    if-goto Board_1
+    push local 0
+    push this 0
+    add
+    push constant 8
+    call Array.new 1
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push constant 0
+    pop local 1
+label Board_2
+    push local 1
+    push constant 8
+    lt
+    not
+    if-goto Board_3
+    push local 0
+    push constant 2
+    call Board.mod 2
+    push local 1
+    push constant 2
+    call Board.mod 2
+    eq
+    not
+    if-goto Board_5
+    push constant 66
+    pop local 3
+    goto Board_4
+label Board_5
+    push constant 87
+    pop local 3
+label Board_4
+    push local 0
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 2
+    push local 1
+    push local 2
+    add
+    push local 3
+    call Square.new 1
+    pop temp 0
+    pop pointer 1
+    push temp 0
+    pop that 0
+    push local 1
+    push constant 1
+    add
+    pop local 1
+    goto Board_2
+label Board_3
+    push local 0
+    push constant 1
+    add
+    pop local 0
+    goto Board_0
+label Board_1
+    push constant 87
+    pop this 1
+    push pointer 0
+    call Board.setBoard 1
+    pop temp 0
+    push constant 4
+    push constant 0
+    call Position.new 2
+    pop this 3
+    push constant 4
+    push constant 7
+    call Position.new 2
+    pop this 2
+    push pointer 0
+    return
+function Board.mod 0
+    push argument 0
+    push argument 1
+    push argument 0
+    push argument 1
+    call Math.divide 2
+    call Math.multiply 2
+    sub
+    return
+function Board.getKingsPosition 0
+    push argument 0
+    pop pointer 0
+    push argument 1
+    push constant 87
+    eq
+    not
+    if-goto Board_7
+    push this 3
+    return
+    goto Board_6
+label Board_7
+    push this 2
+    return
+label Board_6
+function Board.movePiece 16
+    push argument 0
+    pop pointer 0
+    push argument 1
+    push constant 0
+    call String.charAt 2
+    pop local 0
+    push argument 1
+    push constant 1
+    call String.charAt 2
+    pop local 1
+    push argument 1
+    push constant 2
+    call String.charAt 2
+    pop local 2
+    push argument 1
+    push constant 3
+    call String.charAt 2
+    pop local 3
+    push local 0
+    call Conversions.letterToNumber 1
+    pop local 4
+    push local 1
+    call Conversions.parseNumber 1
+    push constant 1
+    sub
+    pop local 5
+    push local 2
+    call Conversions.letterToNumber 1
+    pop local 6
+    push local 3
+    call Conversions.parseNumber 1
+    push constant 1
+    sub
+    pop local 7
+    push local 5
+    push local 7
+    eq
+    push local 4
+    push local 6
+    eq
+    and
+    not
+    if-goto Board_9
+    push constant 1
+    return
+    goto Board_8
+label Board_9
+label Board_8
+    push pointer 0
+    push local 5
+    push local 4
+    call Board.getSquare 3
+    pop local 8
+    push pointer 0
+    push local 7
+    push local 6
+    call Board.getSquare 3
+    pop local 9
+    push local 8
+    call Square.getPiece 1
+    pop local 10
+    push local 9
+    call Square.getPiece 1
+    pop local 11
+    push local 10
+    push constant 0
+    eq
+    not
+    if-goto Board_11
+    push constant 2
+    return
+    goto Board_10
+label Board_11
+label Board_10
+    push local 10
+    call Piece.getColour 1
+    push this 1
+    eq
+    pop local 13
+    push local 13
+    not
+    not
+    if-goto Board_13
+    push constant 3
+    return
+    goto Board_12
+label Board_13
+label Board_12
+    push pointer 0
+    push this 1
+    push local 6
+    push local 7
+    call Validators.validateDestination 4
+    pop local 14
+    push local 14
+    not
+    not
+    if-goto Board_15
+    push constant 4
+    return
+    goto Board_14
+label Board_15
+label Board_14
+    push pointer 0
+    push local 10
+    call Piece.getType 1
+    push this 1
+    push local 4
+    push local 5
+    push local 6
+    push local 7
+    call Validators.validateMove 7
+    pop local 12
+    push local 12
+    not
+    not
+    if-goto Board_17
+    push constant 5
+    return
+    goto Board_16
+label Board_17
+label Board_16
+    push local 8
+    call Square.removePiece 1
+    pop temp 0
+    push local 9
+    push local 10
+    call Square.setPiece 2
+    pop temp 0
+    push local 10
+    call Piece.getType 1
+    push constant 75
+    eq
+    not
+    if-goto Board_19
+    push local 10
+    call Piece.getColour 1
+    push constant 66
+    eq
+    not
+    if-goto Board_21
+    push this 2
+    push local 7
+    call Position.setCol 2
+    pop temp 0
+    push this 2
+    push local 6
+    call Position.setRow 2
+    pop temp 0
+    goto Board_20
+label Board_21
+    push this 3
+    push local 7
+    call Position.setCol 2
+    pop temp 0
+    push this 2
+    push local 6
+    call Position.setRow 2
+    pop temp 0
+label Board_20
+    goto Board_18
+label Board_19
+label Board_18
+    push constant 0
+    return
+function Board.promotePieces 1
+    push argument 0
+    pop pointer 0
+    push constant 0
+    pop local 0
+label Board_22
+    push local 0
+    push constant 8
+    lt
+    not
+    if-goto Board_23
+    push pointer 0
+    push local 0
+    push constant 0
+    push constant 66
+    call Board.promotePieceInSquareIfEligible 4
+    pop temp 0
+    push pointer 0
+    push local 0
+    push constant 7
+    push constant 87
+    call Board.promotePieceInSquareIfEligible 4
+    pop temp 0
+    push local 0
+    push constant 1
+    add
+    pop local 0
+    goto Board_22
+label Board_23
+    push constant 0
+    return
+function Board.promotePieceInSquareIfEligible 2
+    push argument 0
+    pop pointer 0
+    push pointer 0
+    push argument 1
+    push argument 2
+    call Board.getSquare 3
+    pop local 0
+    push local 0
+    call Square.getPiece 1
+    pop local 1
+    push local 1
+    call Piece.getType 1
+    push constant 80
+    eq
+    push local 1
+    call Piece.getColour 1
+    push argument 3
+    eq
+    and
+    not
+    if-goto Board_25
+    push local 1
+    push constant 81
+    call Piece.promotePiece 2
+    pop temp 0
+    goto Board_24
+label Board_25
+label Board_24
+    push constant 0
+    return
+function Board.getCurrentTurn 0
+    push argument 0
+    pop pointer 0
+    push this 1
+    return
+function Board.getSquare 1
+    push argument 0
+    pop pointer 0
+    push argument 2
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push argument 1
+    push local 0
+    add
+    pop pointer 1
+    push that 0
+    return
+function Board.setBoard 0
+    push argument 0
+    pop pointer 0
+    push pointer 0
+    push constant 87
+    call Board.setBackrow 2
+    pop temp 0
+    push pointer 0
+    push constant 66
+    call Board.setBackrow 2
+    pop temp 0
+    push pointer 0
+    push constant 87
+    call Board.setFrontRow 2
+    pop temp 0
+    push pointer 0
+    push constant 66
+    call Board.setFrontRow 2
+    pop temp 0
+    push constant 0
+    return
+function Board.setFrontRow 3
+    push argument 0
+    pop pointer 0
+    push argument 1
+    push constant 127
+    eq
+    not
+    if-goto Board_27
+    push constant 9
+    pop local 0
+    goto Board_26
+label Board_27
+    push constant 55
+    pop local 0
+label Board_26
+    push constant 0
+    pop local 1
+label Board_28
+    push local 1
+    push constant 8
+    lt
+    not
+    if-goto Board_29
+    push local 0
+    push local 1
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 2
+    push local 2
+    push constant 120
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push local 1
+    push constant 1
+    add
+    pop local 1
+    goto Board_28
+label Board_29
+    push constant 0
+    return
+function Board.setBackrow 2
+    push argument 0
+    pop pointer 0
+    push argument 1
+    push constant 127
+    eq
+    not
+    if-goto Board_31
+    push constant 0
+    pop local 1
+    goto Board_30
+label Board_31
+    push constant 56
+    pop local 1
+label Board_30
+    push local 1
+    push constant 0
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push local 0
+    push constant 122
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push local 1
+    push constant 1
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push local 0
+    push constant 116
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push local 1
+    push constant 2
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push local 0
+    push constant 102
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push local 1
+    push constant 3
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push local 0
+    push constant 113
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push local 1
+    push constant 4
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push local 0
+    push constant 121
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push local 1
+    push constant 5
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push local 0
+    push constant 102
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push local 1
+    push constant 6
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push local 0
+    push constant 116
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push local 1
+    push constant 7
+    add
+    push this 0
+    add
+    pop pointer 1
+    push that 0
+    pop local 0
+    push local 0
+    push constant 122
+    push argument 1
+    call Piece.new 2
+    call Square.setPiece 2
+    pop temp 0
+    push constant 0
+    return
