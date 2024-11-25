@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #141414;
+  gap: 20px;
+}
+
+#canvas {
+  display: grid;
+  grid-template-columns: repeat(32, 1fr);
+}
+
+.pixel {
+  width: 20px;
+  height: 20px;
+  border: 1px dashed #141414;
+}
+
+#decimal {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #00ffff;
+  border-radius: 5px;
+  outline: none;
+}
